@@ -1,45 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" width="device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{{url_for('static',filename='styles.css')}}"></rel>  
-        <!-- <link rel="stylesheet" href="static\styles.css"></rel>    -->
-        
-    </head>
-    <body>
-        <div>
-            <h1>Weather app</h1>
-        </div>
-        <div>
-            <form method="POST" action="/">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather app</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
 
-                <label for="latitude">Latitude :</label>
-                <input type="text" name="latitude">
+<body>
+    <div>
+        <h1>Weather app</h1>
+    </div>
+    <div>
+        <form method="POST" action="/" id="weatherForm">
 
-                <label for="longitude">Longitude :</label>
-                <input type="text"name=longitude>
+            <label for="latitude">Latitude :</label>
+            <input type="text" name="latitude" id="latitude">
 
-                <button type="submit">Get Weather</button>
+            <label for="longitude">Longitude :</label>
+            <input type="text" name="longitude" id="longitude">
 
-            </form>
+            <button type="button" onclick="fetchLocation()">Fetch Location</button>
 
-        </div>
+            <button type="submit">Get Weather</button>
 
-        <div>
-            {% if temp_celsius %}
-                <p> temperature :{{temp_celsius}} c</p>
-                <p> Weather     :{{weather}} </p>
-                <p> City        :{{city_name}}    </p>
-                <img src="http://openweathermap.org/img/w/{{icon}}.png" alt="Weather Icon">
+        </form>
 
-            {% endif %}
-            {%if error_message%}
-              <p>error :{{error_message}}</p>
-            {% endif %}
-        </div>
-        
-    </body>
+    </div>
+
+    <div>
+        {% if temp_celsius %}
+        <p> temperature :{{temp_celsius}} c</p>
+        <p> Weather :{{weather}} </p>
+        <p> City :{{city_name}} </p>
+        <img src="http://openweathermap.org/img/w/{{icon}}.png" alt="Weather Icon">
+
+        {% endif %}
+        {% if error_message %}
+        <p>error :{{error_message}}</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function fetchLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            document.getElementById("latitude").value = position.coords.latitude;
+            document.getElementById("longitude").value = position.coords.longitude;
+        }
+    </script>
+</body>
 
 </html>
